@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -48,6 +49,7 @@ public class InputJobActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         ses = new Session(getApplicationContext());
 
         Date now = new Date();
@@ -91,9 +93,6 @@ public class InputJobActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ses.DestroySession();
-
-                Intent i = new Intent(InputJobActivity.this, LoginActivity.class);
-                startActivity(i);
                 finish();
             }
         });

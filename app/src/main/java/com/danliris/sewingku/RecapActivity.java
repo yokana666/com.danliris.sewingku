@@ -352,23 +352,6 @@ public class RecapActivity extends AppCompatActivity {
             //Ll.setPadding(10, 5, 5, 5);
             Ll.addView(tk,params);
             tr.addView((View)Ll); // Adding textView to tablerow.
-
-//            /** Creating Qty Button **/
-//            TextView opo = new TextView(this);
-//            opo.setText(p.getRo());
-//            opo.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
-//                    TableRow.LayoutParams.WRAP_CONTENT));
-//            opo.setPadding(5, 5, 5, 5);
-//            opo.setBackgroundColor(Color.GRAY);
-//            Ll = new LinearLayout(this);
-//            params = new LinearLayout.LayoutParams(TableRow.LayoutParams.FILL_PARENT,
-//                    TableRow.LayoutParams.WRAP_CONTENT);
-//            params.setMargins(0, 2, 2, 2);
-//            //Ll.setPadding(10, 5, 5, 5);
-//            Ll.addView(opo,params);
-//            tr.addView((View)Ll); // Adding textview to tablerow.
-
-            // Add the TableRow to the TableLayout
             tl.addView(tr, new TableLayout.LayoutParams(
                     TableRow.LayoutParams.FILL_PARENT,
                     TableRow.LayoutParams.WRAP_CONTENT));

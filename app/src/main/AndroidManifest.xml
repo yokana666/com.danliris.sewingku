@@ -23,10 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecapActivity"
+        <activity
+            android:name=".RecapActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Sewingku">
-        </activity>
+            android:theme="@style/Theme.Sewingku" />
         <activity
             android:name=".OnProcessActivity"
             android:configChanges="orientation|keyboardHidden"
