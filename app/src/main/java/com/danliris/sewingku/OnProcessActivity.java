@@ -31,7 +31,7 @@ import java.util.Map;
 public class OnProcessActivity extends AppCompatActivity {
 
     TextView okText, bsText, sumText, roText;
-    Button doneButton, okButton, bsButton;
+    Button doneButton, okButton, bsButton, cancleButton;
     String id_proses_item, id_proses, ok, bs;
 
     @Override
@@ -51,6 +51,7 @@ public class OnProcessActivity extends AppCompatActivity {
         okButton = (Button) findViewById(R.id.okBtn);
         bsButton = (Button)findViewById(R.id.bsBtn);
         doneButton = (Button)findViewById(R.id.endProcessBtn);
+        cancleButton = (Button)findViewById(R.id.cancelProcessBtn);
 
         Bundle extra = getIntent().getExtras();
         id_proses_item = extra.getString("id_proses_item");
@@ -81,6 +82,13 @@ public class OnProcessActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 CloseProcess(id_proses);
+            }
+        });
+
+        cancleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CancelProcess(id_proses_item);
             }
         });
     }
@@ -213,6 +221,65 @@ public class OnProcessActivity extends AppCompatActivity {
                 params.put("counter", Counter);
                 params.put("type", Type);
                 params.put("total", Total);
+
+                // at last we are returning our params.
+                return params;
+            }
+        };
+        // below line is to make
+        // a json object request.
+        queue.add(request);
+    }
+
+    private void CancelProcess(String Id){
+        // creating a new variable for our request queue
+        RequestQueue queue = Volley.newRequestQueue(OnProcessActivity.this);
+
+        // on below line we are calling a string
+        // request method to post the data to our API
+        // in this we are calling a post method.
+        StringRequest request = new StringRequest(Request.Method.POST, Endpoint.CANCEL_PROCESS_BY_ID_ENDPOINT_BASE_URL, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    Log.e("TAG", "RESPONSE IS " + response);
+                    // on below line passing our response to json object.
+                    JSONObject jsonObject = new JSONObject(response);
+                    // on below line we are checking if the response is null or not.
+                    if(jsonObject.getString("error").equals("true")){
+                        // displaying a toast message if we get error
+                        Toast.makeText(OnProcessActivity.this, "Please enter valid id.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        finish();
+                    }
+                    // on below line we are displaying
+                    // a success toast message.
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // method to handle errors.
+                Toast.makeText(OnProcessActivity.this, "Fail to get data" + error, Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                // as we are passing data in the form of url encoded
+                // so we are passing the content type below
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                // below line we are creating a map for storing our values in key and value pair.
+                Map<String, String> params = new HashMap<String, String>();
+
+                // on below line we are passing our key and value pair to our parameters.
+                params.put("id", id_proses_item);
 
                 // at last we are returning our params.
                 return params;

@@ -83,7 +83,7 @@ public class InputJobActivity extends AppCompatActivity {
                     roJob.setError("Nomor RO tidak boleh kosong");
                 }
                 else {
-                    ProcessItem data = new ProcessItem(0, lineJob.getText().toString().toUpperCase(), roJob.getText().toString(), 0, 0,0, Integer.parseInt(processSession));
+                    ProcessItem data = new ProcessItem(0, lineJob.getText().toString().toUpperCase(), roJob.getText().toString().toUpperCase(), 0, 0,0, Integer.parseInt(processSession));
                     InsertData(data);
                 }
             }
@@ -92,8 +92,7 @@ public class InputJobActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ses.DestroySession();
-                finish();
+                CloseProcess(ses.getIdProcess());
             }
         });
 
@@ -217,6 +216,65 @@ public class InputJobActivity extends AppCompatActivity {
                 // on below line we are passing our
                 // key and value pair to our parameters.
                 params.put("id", id);
+                // at last we are returning our params.
+                return params;
+            }
+        };
+        // below line is to make
+        // a json object request.
+        queue.add(request);
+    }
+
+    private  void CloseProcess(String Id){
+        // creating a new variable for our request queue
+        RequestQueue queue = Volley.newRequestQueue(InputJobActivity.this);
+
+        // on below line we are calling a string
+        // request method to post the data to our API
+        // in this we are calling a post method.
+        StringRequest request = new StringRequest(Request.Method.POST, Endpoint.END_PROCESS_BY_ID_ENDPOINT_BASE_URL, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    Log.e("TAG", "RESPONSE IS " + response);
+                    // on below line passing our response to json object.
+                    JSONObject jsonObject = new JSONObject(response);
+                    // on below line we are checking if the response is null or not.
+                    if(jsonObject.getString("error").equals("true")){
+                        // displaying a toast message if we get error
+                        Toast.makeText(InputJobActivity.this, "Please enter valid id.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        ses.DestroySession();
+                        finish();
+                    }
+                    // on below line we are displaying
+                    // a success toast message.
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // method to handle errors.
+                Toast.makeText(InputJobActivity.this, "Fail to get data" + error, Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                // as we are passing data in the form of url encoded
+                // so we are passing the content type below
+                return "application/x-www-form-urlencoded; charset=UTF-8";
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+
+                // below line we are creating a map for storing our values in key and value pair.
+                Map<String, String> params = new HashMap<String, String>();
+
+                // on below line we are passing our key and value pair to our parameters.
+                params.put("id", Id);
                 // at last we are returning our params.
                 return params;
             }
